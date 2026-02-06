@@ -1,958 +1,220 @@
-# Transaction Anomaly Detection System
+# Transaction Anomaly Detection — Fraud Detection & AML with Machine Learning
 
-Enterprise-grade fraud detection system combining traditional AML compliance with machine learning and AI techniques. This production-ready solution integrates real-time monitoring, explainable AI, and self-service analytics to detect financial fraud and money laundering with high accuracy.
+**Enterprise-grade financial fraud and anti–money laundering (AML) detection using machine learning, deep learning, and rule-based compliance.** Real-time API, explainable AI, and self-service analytics. By **KuchikiRenji**.
 
-**Performance Highlights:**
-- ML-based model: AUC 0.9939, Precision 1.0, Recall 0.96
-- Combined system: AUC 0.9980, Average Precision 0.8240
-- Rule-based detection: Conservative thresholds, 2.29% flag rate
-- Multi-model ensemble: XGBoost, LightGBM, Random Forest, Isolation Forest, **Autoencoder**, **LSTM Autoencoder**, **Transformer**
-- Advanced deep learning models integrated for novel fraud pattern detection
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Built with Databricks, SQL, Python, and AI tools - This project demonstrates end-to-end data analyst capabilities, from data modeling with dbt to building self-service analytics tools that enable product teams to make data-driven decisions.
+---
 
-## Project Overview
+## What Is This Project?
 
-This transaction anomaly detection system provides a complete pipeline for fraud detection, from data ingestion to model deployment and monitoring. The system combines rule-based AML scenarios, machine learning models, and network analysis to identify suspicious transactions with high accuracy.
+Transaction Anomaly Detection is a **production-ready fraud detection system** that combines:
 
-### Key Features
+- **Rule-based AML** (large transactions, structuring, layering, high-risk entities)
+- **Classical ML** (XGBoost, LightGBM, Random Forest, Isolation Forest)
+- **Deep learning** (Autoencoder, LSTM Autoencoder, Transformer)
+- **Network analysis** (cycles, fan-in/fan-out, community detection)
+- **Explainability** (SHAP, audit logs) and **BI/Reporting** (Power BI, Looker, Streamlit)
 
-- Production-ready Azure deployment with live API
-- 23 Python modules with 7,800+ lines of code
-- **Fully configurable system** - 60+ parameters externalized to config.yaml
-- **Multi-model architecture**:
-  - Traditional ML: XGBoost, LightGBM, Random Forest, Isolation Forest
-  - **Advanced Deep Learning: Autoencoder, LSTM Autoencoder, Transformer**
-- Excellent ML model performance (AUC: 0.9939, Precision: 1.0, Recall: 0.96)
-- Combined system with ensemble approach (AUC: 0.9980) integrating all models
-- **Deep learning models** for detecting novel fraud patterns and temporal sequences
-- Real-time API for transaction scoring
-- Cloud-native architecture with Docker and Kubernetes
-- Comprehensive monitoring and explainability
-- Self-service analytics dashboard
-- Automated reporting system (daily, weekly, monthly)
-- BI tool integration (Power BI, Looker)
-- Model diagnostics for overfitting and bias detection
-- Rule-based AML compliance scenarios with configurable thresholds
-- **No hardcoded business logic** - all parameters configurable for A/B testing
+It is built for **PaySim-style transaction data**, runs locally or in the cloud (Azure, Docker, Kubernetes), and exposes a **REST API** for real-time scoring.
 
-## Data Analyst Capabilities
+---
 
-This project demonstrates comprehensive data analyst skills:
+## Performance at a Glance
 
-- SQL and Databricks: Complete medallion architecture (Bronze/Silver/Gold) with PySpark SQL transformations
-- dbt Integration: Data modeling with dbt for reliable, version-controlled transformations
-- Python Analytics: 23 modules with extensive data processing, feature engineering, and business metrics
-- Business Intelligence: BI export service for Power BI/Looker with pre-aggregated views
-- Self-Service Analytics: Interactive Streamlit dashboard and comprehensive documentation
-- AI Tools: LLM integration (GPT-4) and RAG pipeline for workflow improvement
-- Product Team Enablement: APIs, dashboards, and examples that enable self-service analytics
-- End-to-End Data Products: Complete pipeline from raw data to actionable insights
-- Automated Reporting: Scheduled daily, weekly, and monthly business reports
+| Component        | AUC    | Precision | Recall | Flag Rate |
+|-----------------|--------|-----------|--------|-----------|
+| **ML-based**    | 0.9939 | 1.0       | 0.96   | 0.66%     |
+| **Rule-based**  | 0.8859 | 0.16      | 0.78   | 2.29%     |
+| **Combined**    | 0.9980 | 0.037     | 0.97   | 18.86%    |
 
-## Architecture
+- **Combined system:** AUC 0.9980, Average Precision 0.8240  
+- **Multi-model ensemble:** XGBoost, LightGBM, Random Forest, Isolation Forest, Autoencoder, LSTM Autoencoder, Transformer  
+- **Fully configurable:** 60+ parameters in `config/config.yaml`, no hardcoded business logic  
 
-The system employs a multi-layered detection approach combining traditional machine learning, advanced deep learning, rule-based scenarios, and network analysis.
+---
 
-### Core Models
+## Features
 
-#### Rule-Based Detection
-Module: `src/models/rule_based_scenarios.py`
+- **Real-time fraud detection API** (FastAPI) with `/predict`, `/health`, `/metrics`
+- **Rule-based AML scenarios** — large transactions, structuring (smurfing), rapid movement (layering), high-risk entities
+- **ML ensemble** — XGBoost, LightGBM, Random Forest, Isolation Forest + **Autoencoder, LSTM Autoencoder, Transformer**
+- **Network analysis** — transaction graphs, cycle detection, Louvain communities, centrality
+- **Feature store** — online/offline features, versioning, configurable windows
+- **Explainability & compliance** — SHAP, per-prediction explanations, audit logging, EU AI Act–oriented
+- **BI & reporting** — Parquet/CSV/Excel export, Streamlit dashboard, daily/weekly/monthly reports
+- **LLM & RAG** (optional) — GPT-4 risk explanations, ChromaDB-based pattern search
+- **DevOps** — Docker, Kubernetes, Terraform, Prometheus/Grafana, Azure-friendly
 
-- Large transaction detection (99th percentile threshold)
-- Structuring (smurfing) detection
-- Rapid movement (layering) detection
-- Unusual activity flagging
-- High-risk entity monitoring
-- Conservative thresholds to minimize false positives
-- AUC: 0.8859, flags 2.29% of transactions
-
-#### ML Anomaly Detection
-Module: `src/models/ml_anomaly_detection.py`
-
-- Isolation Forest for unsupervised detection
-- XGBoost (AUC: 0.9939, Precision: 1.0, Recall: 0.96)
-- LightGBM (AUC: 0.9939, excellent performance)
-- Random Forest (AUC: 0.9700, well-regularized)
-- SHAP explainability for feature importance
-- Model persistence and versioning
-- Regularization (L1/L2) and early stopping to prevent overfitting
-- Model diagnostics for bias and overfitting detection
-
-#### Advanced Deep Learning Models
-Module: `src/models/advanced_models.py`
-
-The system includes state-of-the-art deep learning models for advanced anomaly detection:
-
-- **Autoencoder**: Unsupervised anomaly detection using reconstruction error
-  - Encoder-decoder architecture with bottleneck layer
-  - Detects transactions with high reconstruction error (anomalies)
-  - Suitable for detecting novel fraud patterns not seen in training
-  - Architecture: Input → Encoder (compressed representation) → Decoder (reconstruction)
-  - Threshold: 95th percentile of reconstruction error on training data
-  
-- **LSTM Autoencoder**: Sequential pattern detection for temporal fraud
-  - Long Short-Term Memory (LSTM) networks for sequence modeling
-  - Captures temporal dependencies in transaction sequences
-  - Detects anomalies in transaction patterns over time
-  - Ideal for detecting structured fraud schemes (layering, smurfing)
-  - Architecture: LSTM Encoder → LSTM Decoder → Reconstruction
-  - Sequence length: Adaptive based on transaction history
-  - Handles variable-length transaction sequences
-  
-- **Transformer**: Self-attention based anomaly detection
-  - Multi-head attention mechanism for complex pattern recognition
-  - Captures long-range dependencies in transaction sequences
-  - State-of-the-art performance for sequence modeling
-  - Architecture: Embedding → Transformer Encoder → Decoder → Reconstruction
-  - Attention heads: 8, Layers: 3, Model dimension: 128
-  - Superior at detecting complex multi-step fraud patterns
-
-All advanced models are integrated into the training pipeline and contribute to the ensemble predictions. They are particularly effective at detecting novel fraud patterns that traditional ML models might miss.
-
-#### Network Analysis
-Module: `src/models/network_analysis.py`
-
-- Transaction network construction using NetworkX
-- Cycle detection (potential money laundering)
-- Fan-in/fan-out pattern analysis
-- Community detection (Louvain algorithm)
-- Centrality metrics calculation
-- Graph visualization
-
-### Services
-
-#### Feature Store
-Module: `src/services/feature_store.py`
-
-- Real-time feature computation
-- Online and offline feature serving
-- Feature versioning and metadata
-- Aggregation windows (1h, 24h, 1 week)
-
-#### Business Metrics
-Module: `src/services/business_metrics.py`
-
-- Transaction volume trends
-- Merchant risk distribution
-- Business summary reports
-- KPI calculations
-
-#### Product Metrics
-Module: `src/services/product_metrics.py`
-
-- User transaction patterns
-- Transaction type distribution
-- Time-based insights
-- Product adoption metrics
-
-#### BI Export Service
-Module: `src/services/bi_export.py`
-
-- Export to Parquet, CSV, Excel formats
-- Pre-aggregated views for BI tools
-- Transaction data exports
-- Merchant metrics exports
-- Volume trends exports
-
-#### Automated Reporting
-Module: `src/services/automated_reporting.py`
-
-- Daily, weekly, monthly report generation
-- HTML, JSON, and CSV output formats
-- Scheduled report execution
-- Comprehensive business metrics
-
-#### LLM Service
-Module: `src/services/llm_service.py`
-
-- GPT-4 integration for risk explanations
-- Natural language risk assessment
-- Multi-language support
-- Automated case summarization
-
-#### RAG Pipeline
-Module: `src/services/rag_pipeline.py`
-
-- ChromaDB vector database integration
-- Transaction pattern similarity search
-- Contextual anomaly detection
-- Historical pattern matching
-
-#### Merchant Services
-Module: `src/services/merchant_services.py`
-
-- Merchant risk profiling
-- Alert prioritization
-- Merchant health scoring
-- Industry benchmarking
-
-### Data Processing
-
-#### Preprocessor
-Module: `src/data/preprocessor.py`
-
-- Data loading and validation
-- Feature engineering
-- Encoding and scaling
-- Train/test splitting
-- Data quality checks
-
-### Monitoring and Compliance
-
-#### Model Monitoring
-Module: `src/mlops/model_monitoring.py`
-
-- Data drift detection
-- Performance monitoring
-- Prediction pattern analysis
-- Automated alerting
-
-#### Explainability
-Module: `src/compliance/explainability.py`
-
-- SHAP-based model explanations
-- Per-prediction feature contributions
-- Audit logging
-- Compliance reporting
-
-## Project Structure
-
-```
-Transaction-Anomaly-Detection/
-├── config/
-│   ├── __init__.py              # Configuration loaders
-│   └── config.yaml              # Main configuration
-├── src/
-│   ├── api/
-│   │   └── main.py              # FastAPI application
-│   ├── compliance/
-│   │   └── explainability.py    # XAI and compliance
-│   ├── data/
-│   │   └── preprocessor.py     # Data preprocessing
-│   ├── mlops/
-│   │   └── model_monitoring.py # Monitoring and drift
-│   ├── models/
-│   │   ├── advanced_models.py       # Deep learning models (Autoencoder, LSTM, Transformer)
-│   │   ├── ml_anomaly_detection.py  # ML models (XGBoost, LightGBM, Random Forest)
-│   │   ├── model_diagnostics.py     # Overfitting and bias detection
-│   │   ├── network_analysis.py      # Graph analysis
-│   │   └── rule_based_scenarios.py  # AML rules
-│   ├── services/
-│   │   ├── automated_reporting.py   # Report generation
-│   │   ├── bi_export.py             # BI tool exports
-│   │   ├── business_metrics.py      # Business KPIs
-│   │   ├── feature_store.py         # Feature management
-│   │   ├── llm_service.py           # LLM integration
-│   │   ├── merchant_services.py     # Merchant intelligence
-│   │   ├── product_metrics.py       # Product metrics
-│   │   └── rag_pipeline.py          # RAG with vectors
-│   ├── utils/
-│   │   └── helpers.py           # Utility functions
-│   ├── visualization/
-│   │   └── visualizer.py        # Plotting tools
-│   └── main.py                  # Main orchestration
-├── dashboards/
-│   └── business_dashboard.py   # Streamlit dashboard
-├── databricks/
-│   └── notebooks/
-│       ├── 01_data_ingestion.py
-│       ├── 02_feature_engineering.py
-│       └── 03_model_training.py
-├── dbt/
-│   ├── models/
-│   │   ├── staging/
-│   │   │   └── stg_transactions.sql
-│   │   ├── intermediate/
-│   │   │   └── int_transaction_features.sql
-│   │   └── marts/
-│   │       ├── fct_transactions.sql
-│   │       └── dim_merchants.sql
-│   └── dbt_project.yml
-├── scripts/
-│   ├── generate_report.py      # Report generation CLI
-│   ├── schedule_reports.py     # Scheduled reports
-│   ├── download_dataset.py     # Dataset download
-│   └── export_for_bi.py        # BI export CLI
-├── tests/
-│   ├── test_bi_export.py
-│   ├── test_business_metrics.py
-│   ├── test_config_integration.py  # Configuration integration tests
-│   ├── test_feature_store.py
-│   ├── test_llm_service.py
-│   ├── test_model_monitoring.py
-│   └── integration/
-│       └── test_full_pipeline.py
-├── k8s/                         # Kubernetes manifests
-├── terraform/                   # Infrastructure as Code
-├── monitoring/                  # Prometheus and Grafana configs
-└── requirements.txt             # Python dependencies
-```
-
-**Total:** 23 Python modules in src/, 42 Python files total, 4 SQL models, 6,824+ lines of code
-
-### Key Outputs
-
-The pipeline generates comprehensive outputs in the `output_final_all_figures/` directory:
-
-- **Visualizations:**
-  - `roc_curves.png` - ROC curves for all models
-  - `pr_curves.png` - Precision-recall curves
-  - `confusion_matrix.png` - ML-based model confusion matrix
-  - `confusion_matrix_combined.png` - Combined system confusion matrix
-  - `rule_based_summary.png` - Rule-based scenario results
-  - `shap_summary.png` - SHAP feature importance
-  - `transaction_network.png` - Network analysis visualization
-
-- **Results:**
-  - `combined_results.csv` - Complete detection results
-  - `evaluation_metrics.json` - Performance metrics
-  - `model_diagnostics.json` - Overfitting and bias analysis
-  - `alert_report.csv` - High-risk transaction alerts
-  - `rule_based_summary.csv` - Rule-based scenario summary
+---
 
 ## Quick Start
 
 ### Prerequisites
 
 - Python 3.10+
-- Docker and Docker Compose (optional)
-- Azure CLI (for cloud deployment)
+- Docker & Docker Compose (optional)
+- Azure CLI (optional, for cloud deploy)
 
-### Local Development
+### Install and run
 
 ```bash
-# Clone repository
-git clone https://github.com/saidulIslam1602/Transaction-Anomaly-Detection.git
+# Clone (replace with your fork if needed)
+git clone https://github.com/KuchikiRenji/Transaction-Anomaly-Detection.git
 cd Transaction-Anomaly-Detection
 
-# Create virtual environment
+# Virtual environment
 python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 
-# Install dependencies
+# Dependencies
 pip install -r requirements.txt
 
-# Download dataset (creates synthetic dataset if Kaggle unavailable)
+# Get data (synthetic if Kaggle unavailable)
 python scripts/download_dataset.py
 
-# Run full pipeline
+# Full pipeline
 python src/main.py --data data/transactions.csv --output output/
 
-# Start API server
+# API
 uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 
-# Start business dashboard
+# Dashboard
 streamlit run dashboards/business_dashboard.py
 ```
 
-### Using Docker
+### Docker
 
 ```bash
-# Build and run with Docker Compose
 docker-compose up -d
-
-# View logs
 docker-compose logs -f
-
-# Stop services
 docker-compose down
 ```
 
-## Dataset
+---
 
-The project can use the PaySim dataset from Kaggle (ealaxi/paysim1), which is a synthetic financial transaction dataset based on real mobile money transaction patterns. The system is designed to work with transaction datasets in the PaySim format.
+## Project Structure (Overview)
 
-### Dataset Format
-
-The system expects transaction data with the following columns:
-- `step`: Time step (hour)
-- `type`: Transaction type (PAYMENT, TRANSFER, CASH_OUT, CASH_IN, DEBIT)
-- `amount`: Transaction amount
-- `nameOrig`: Origin account identifier
-- `oldbalanceOrg`: Origin account balance before transaction
-- `newbalanceOrig`: Origin account balance after transaction
-- `nameDest`: Destination account identifier
-- `oldbalanceDest`: Destination account balance before transaction
-- `newbalanceDest`: Destination account balance after transaction
-- `isFraud`: Fraud label (0 = normal, 1 = fraud) - optional for supervised learning
-
-### Current Evaluation Dataset
-
-The performance metrics shown in this README are based on evaluation with 10,000 transactions:
-- Actual fraud rate: 0.68% (68 fraud cases)
-- The system can process larger datasets (tested up to 50,000+ transactions)
-
-If the PaySim dataset is unavailable, the system automatically generates a realistic synthetic dataset for testing purposes.
-
-## Usage
-
-### Running the Full Pipeline
-
-```bash
-python src/main.py --data data/transactions.csv --output output/ --sample 100000
+```
+Transaction-Anomaly-Detection/
+├── config/config.yaml       # Main config (60+ parameters)
+├── src/
+│   ├── api/main.py          # FastAPI app
+│   ├── compliance/          # Explainability, audit
+│   ├── data/                # Preprocessing
+│   ├── mlops/               # Model monitoring, drift
+│   ├── services/            # Feature store, BI export, LLM, RAG, reporting, merchants
+│   ├── utils/               # Helpers, config loader
+│   ├── visualization/       # Plots
+│   └── main.py              # Pipeline orchestration
+├── dashboards/              # Streamlit dashboard
+├── databricks/notebooks/    # Ingestion, features, training
+├── dbt/                     # Data models (staging, marts)
+├── scripts/                 # Download data, reports, BI export
+├── tests/                   # Pytest
+├── k8s/                     # Kubernetes manifests
+├── terraform/               # IaC
+└── monitoring/              # Prometheus, Grafana
 ```
 
-This will:
-1. Load and preprocess transaction data
-2. Run rule-based detection scenarios (conservative thresholds)
-3. Train and evaluate ML models:
-   - Traditional ML: XGBoost, LightGBM, Random Forest, Isolation Forest
-   - Advanced Deep Learning: Autoencoder, LSTM Autoencoder, Transformer
-4. Perform model diagnostics (overfitting, bias detection)
-5. Perform network analysis (cycle detection, community analysis)
-6. Combine all results with weighted ensemble (includes deep learning predictions)
-7. Generate visualizations (ROC curves, PR curves, confusion matrices, SHAP plots)
-8. Generate reports and alert summaries
+---
 
-### Using the API
+## Dataset (PaySim)
 
-Start the API server:
+Uses **PaySim-style** fields: `step`, `type`, `amount`, `nameOrig`, `oldbalanceOrg`, `newbalanceOrig`, `nameDest`, `oldbalanceDest`, `newbalanceDest`, `isFraud`. Compatible with [PaySim (Kaggle)](https://www.kaggle.com/datasets/ealaxi/paysim1). If the dataset is unavailable, the project can generate synthetic data for testing.
+
+---
+
+## API Usage
+
 ```bash
+# Start API
 uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 ```
 
-API endpoints:
-- GET / - API information
-- GET /health - Health check
-- POST /predict - Real-time fraud prediction
-- GET /docs - Interactive API documentation
-- GET /metrics - Prometheus metrics
+- **GET /** — API info  
+- **GET /health** — Health check  
+- **POST /predict** — Real-time fraud score  
+- **GET /docs** — Swagger UI  
+- **GET /metrics** — Prometheus metrics  
 
-Example prediction request:
+Example:
+
 ```bash
 curl -X POST "http://localhost:8000/predict" \
   -H "Content-Type: application/json" \
-  -d '{
-    "step": 1,
-    "type": "TRANSFER",
-    "amount": 5000.0,
-    "nameOrig": "C123456789",
-    "oldbalanceOrg": 10000.0,
-    "newbalanceOrig": 5000.0,
-    "nameDest": "M987654321",
-    "oldbalanceDest": 0.0,
-    "newbalanceDest": 5000.0
-  }'
+  -d '{"step":1,"type":"TRANSFER","amount":5000.0,"nameOrig":"C123456789","oldbalanceOrg":10000.0,"newbalanceOrig":5000.0,"nameDest":"M987654321","oldbalanceDest":0.0,"newbalanceDest":5000.0}'
 ```
 
-### Using the Business Dashboard
-
-```bash
-streamlit run dashboards/business_dashboard.py
-```
-
-Access at http://localhost:8501
-
-Features:
-- System overview with key metrics
-- Fraud detection performance analysis
-- Merchant analytics and risk profiling
-- Data export for BI tools
-- Automated report generation
-
-### Generating Reports
-
-Daily report:
-```bash
-python scripts/generate_report.py --type daily --data data/transactions.csv
-```
-
-Weekly report:
-```bash
-python scripts/generate_report.py --type weekly --data data/transactions.csv
-```
-
-Monthly report:
-```bash
-python scripts/generate_report.py --type monthly --data data/transactions.csv
-```
-
-Scheduling reports with cron:
-```bash
-# Daily report at 9 AM
-0 9 * * * python scripts/schedule_reports.py --type daily
-
-# Weekly report every Monday
-0 9 * * 1 python scripts/schedule_reports.py --type weekly
-
-# Monthly report on 1st of month
-0 9 1 * * python scripts/schedule_reports.py --type monthly
-```
-
-### Exporting Data for BI Tools
-
-```bash
-python scripts/export_for_bi.py --input data/transactions.csv --output bi_exports/
-```
-
-Or use the BI export service:
-```python
-from src.services.bi_export import BIExportService
-
-export_service = BIExportService()
-exports = export_service.export_all_views(df, formats=['parquet', 'csv'])
-```
-
-## Model Performance
-
-### Performance Metrics Summary
-
-The system has been evaluated on transaction datasets with the following actual performance metrics:
-
-| Model | AUC | Average Precision | Accuracy | Precision | Recall | F1-Score | Flag Rate |
-|-------|-----|-------------------|----------|-----------|--------|----------|-----------|
-| **ML-Based** | 0.9939 | 0.9801 | 0.9999 | 1.0000 | 0.9600 | 0.9796 | 0.66% |
-| **Rule-Based** | 0.8859 | 0.1254 | 0.9914 | 0.1602 | 0.7800 | 0.2667 | 2.29% |
-| **Network-Based** | - | - | 0.9475 | 0.0016 | 0.0400 | 0.0031 | - |
-| **Combined System** | 0.9980 | 0.8240 | 0.9493 | 0.0369 | 0.9700 | 0.0712 | 18.86% |
-
-**Actual Fraud Rate**: 0.68% (68 fraud cases out of 10,000 transactions)
-
-### Detailed Performance Metrics
-
-#### ML-Based Model (Primary Detection)
-
-**Classification Metrics:**
-- **AUC**: 0.9939 (99.39%)
-- **Average Precision (AP)**: 0.9801 (98.01%)
-- **Accuracy**: 0.9999 (99.99%)
-- **Precision**: 1.0000 (100.00% - no false positives)
-- **Recall**: 0.9600 (96.00%)
-- **F1-Score**: 0.9796
-
-**Confusion Matrix (from 10,000 transaction sample):**
-- True Positives (TP): 66 (fraud correctly detected)
-- False Positives (FP): 0 (no false alarms)
-- True Negatives (TN): 9,932 (legitimate transactions correctly identified)
-- False Negatives (FN): 2 (fraud missed)
-
-The ML-based model demonstrates excellent performance with perfect precision, meaning all flagged transactions are actual fraud cases. It correctly identifies 96% of fraud cases with zero false positives.
-
-#### Rule-Based Detection
-
-**Classification Metrics:**
-- **AUC**: 0.8859 (88.59%)
-- **Average Precision (AP)**: 0.1254 (12.54%)
-- **Accuracy**: 0.9914 (99.14%)
-- **Precision**: 0.1602 (16.02%)
-- **Recall**: 0.7800 (78.00%)
-- **F1-Score**: 0.2667
-
-**Flag Rate**: 2.29% of transactions (229 out of 10,000)
-
-**Scenarios:**
-- Large transactions (99th percentile threshold)
-- Structuring (smurfing) detection
-- Rapid movement (layering) detection
-- High-risk account monitoring
-
-The rule-based system uses conservative thresholds (99th percentile) to minimize false positives while maintaining regulatory compliance. It has high recall (78%) but lower precision (16%) due to its conservative approach.
-
-#### Network-Based Detection
-
-**Classification Metrics:**
-- **Accuracy**: 0.9475 (94.75%)
-- **Precision**: 0.0016 (0.16%)
-- **Recall**: 0.0400 (4.00%)
-- **F1-Score**: 0.0031
-
-Network analysis identifies suspicious transaction patterns through graph analysis but has very low precision, making it more suitable as a complementary detection method rather than a primary classifier.
-
-#### Combined System (Ensemble)
-
-**Classification Metrics:**
-- **AUC**: 0.9980 (99.80%)
-- **Average Precision (AP)**: 0.8240 (82.40%)
-- **Accuracy**: 0.9493 (94.93%)
-- **Precision**: 0.0369 (3.69%)
-- **Recall**: 0.9700 (97.00%)
-- **F1-Score**: 0.0712
-
-**Flag Rate**: 18.86% of transactions (1,886 out of 10,000)
-
-**Model Weights:**
-- ML-based: 3.0 (highest weight due to best performance)
-- Rule-based: 1.0
-- Network-based: 2.0
-
-The combined system integrates ML predictions, rule-based scenarios, and network analysis to provide comprehensive fraud detection. It achieves the highest AUC (0.9980) and recall (97%), catching nearly all fraud cases, though with lower precision due to the ensemble approach.
-
-### Confusion Matrix (Combined System)
-
-The combined system confusion matrix shows the performance of the integrated detection approach:
-
-![Combined System Confusion Matrix](output_final_all_figures/confusion_matrix_combined.png)
-
-**Interpretation:**
-- The combined system uses an adaptive threshold based on risk score distribution
-- It provides comprehensive coverage by combining multiple detection methods
-- The system balances precision and recall to minimize both false positives and false negatives
-
-### Individual Model Performance
-
-**Traditional ML Models:**
-- **XGBoost**: AUC = 0.9939 (99.39%) - Gradient boosting with regularization
-- **LightGBM**: AUC = 0.9939 (99.39%) - Fast gradient boosting
-- **Random Forest**: AUC = 0.9700 (97.00%) - Ensemble of decision trees
-- **Isolation Forest**: Unsupervised anomaly detection for unknown patterns
-
-**Advanced Deep Learning Models:**
-- **Autoencoder**: Deep learning-based reconstruction error detection
-  - Architecture: Encoder-decoder with bottleneck (14 dimensions)
-  - Detects anomalies through reconstruction error threshold
-  - Effective for novel fraud pattern detection
-  - Training: 50 epochs with early stopping
-  
-- **LSTM Autoencoder**: Sequential pattern anomaly detection
-  - Architecture: LSTM encoder-decoder with sequence modeling
-  - Captures temporal dependencies in transaction sequences
-  - Sequence length: Adaptive (typically 10 transactions)
-  - Hidden dimensions: 64, Layers: 2
-  - Ideal for detecting structured fraud schemes over time
-  
-- **Transformer**: Self-attention based sequence anomaly detection
-  - Architecture: Multi-head attention with transformer encoder-decoder
-  - Model dimension: 128, Attention heads: 8, Layers: 3
-  - Captures complex long-range dependencies
-  - State-of-the-art performance for sequence anomaly detection
-  - Superior at detecting multi-step fraud patterns
-
-All models are trained and evaluated as part of the ensemble system, with advanced deep learning models providing complementary detection capabilities for complex fraud patterns. The ensemble combines predictions from all models using weighted voting, with ML-based models receiving the highest weights due to their superior performance.
-
-### Model Diagnostics
-
-The system includes automated model diagnostics to detect:
-- **Overfitting**: Train/test performance gaps
-- **Underfitting**: Insufficient model complexity
-- **Bias**: Systematic prediction errors
-
-Current diagnostics show:
-- XGBoost: Well-fitted (minimal overfitting)
-- LightGBM: Well-fitted (minimal overfitting)
-- Random Forest: Mild overfitting (AUC gap: 0.03)
-
-Regularization techniques (L1/L2, early stopping, reduced complexity) are applied to prevent overfitting.
-
-## Technology Stack
-
-### Core ML/AI
-- scikit-learn - Classical ML algorithms
-- XGBoost - Gradient boosting
-- LightGBM - Fast gradient boosting
-- **TensorFlow/Keras** - Deep learning for Autoencoder models
-- **PyTorch** - Neural networks for LSTM Autoencoder and Transformer models
-- PyTorch Geometric - Graph neural networks (optional)
-
-### NLP and LLM
-- OpenAI GPT-4 - Risk assessment and communication
-- Sentence Transformers - Embeddings
-- ChromaDB - Vector database
-
-### Data Processing
-- Pandas - Data manipulation
-- NumPy - Numerical computing
-- NetworkX - Graph analysis
-
-### API and Deployment
-- FastAPI - REST API framework
-- Uvicorn - ASGI server
-- Pydantic - Data validation
-
-### Data Modeling and BI
-- dbt - Data transformation and modeling
-- Streamlit - Interactive dashboards
-- PySpark SQL - Large-scale transformations (Databricks)
-
-### Cloud and Infrastructure
-- Microsoft Azure - Cloud platform
-- Docker - Containerization
-- Kubernetes - Orchestration
-- Terraform - Infrastructure as Code
-
-### Monitoring and MLOps
-- MLflow - Experiment tracking (optional)
-- Prometheus - Metrics collection
-- Grafana - Visualization dashboards
-- SHAP - Model explainability
+---
 
 ## Configuration
 
-The system is fully configurable via `config/config.yaml`. All business logic, thresholds, and parameters are externalized for easy customization without code changes.
+All behavior is driven by **`config/config.yaml`**: rule thresholds, ML hyperparameters, risk weights, API settings, monitoring, LLM/RAG toggles, merchant onboarding, etc. No hardcoded business logic. See `config/config.yaml` and `VERIFICATION_CHECKLIST.md` for details.
 
-### Configuration Sections
+---
 
-```yaml
-# Business metrics and costs
-business_metrics:
-  cost_per_alert_review: 10.0
-  industry_benchmarks:
-    avg_fraud_rate: 0.02
-    avg_risk_score: 3.5
-    avg_transaction_amount: 5000.0
+## Technology Stack
 
-# Data preprocessing parameters
-preprocessing:
-  outlier_detection:
-    iqr_multiplier: 3.0
-    epsilon: 0.01
+- **ML/DL:** scikit-learn, XGBoost, LightGBM, TensorFlow/Keras, PyTorch, SHAP  
+- **NLP/LLM:** OpenAI GPT-4, Sentence Transformers, ChromaDB  
+- **Data:** Pandas, NumPy, NetworkX, PySpark (Databricks), dbt  
+- **API:** FastAPI, Uvicorn, Pydantic  
+- **BI/Dashboards:** Streamlit, Parquet/CSV/Excel export  
+- **Infra:** Docker, Kubernetes, Terraform, Azure, Prometheus, Grafana  
 
-# Merchant services configuration
-merchant_services:
-  risk_thresholds:
-    high_risk: 7.0
-    medium_risk: 4.0
-    low_risk: 2.0
-  alert_prioritization:
-    amount_thresholds:
-      critical: 10000
-      high: 5000
-      medium: 1000
-  onboarding:
-    risk_score_thresholds:
-      reject: 60
-      monitor: 40
-      review: 20
+---
 
-# ML model hyperparameters
-ml_models:
-  xgboost:
-    enabled: true
-    max_depth: 6
-    learning_rate: 0.1
-    n_estimators: 100
-  lightgbm:
-    enabled: true
-    num_leaves: 31
-    learning_rate: 0.05
-  random_forest:
-    enabled: true
-    n_estimators: 100
-    max_depth: 10
+## Documentation
 
-# Risk scoring weights
-risk_scoring:
-  weights:
-    rule_based: 1.0
-    ml_based: 3.0
-    network_based: 2.0
-  adaptive_threshold_multiplier: 1.5
+| Resource              | Path |
+|-----------------------|------|
+| Config reference      | `config/config.yaml` |
+| Config checklist      | `VERIFICATION_CHECKLIST.md` |
+| API                   | `src/api/main.py` |
+| Data analyst role     | `docs/DATA_ANALYST_ROLE.md` |
+| Self-service & BI     | `docs/SELF_SERVICE_GUIDE.md`, `docs/DASHBOARD_GUIDE.md` |
+| Feature store         | `docs/FEATURE_STORE_GUIDE.md` |
+| dbt                   | `dbt/README.md` |
+| Terraform             | `terraform/README.md` |
 
-# API prediction settings
-api:
-  prediction:
-    fraud_threshold: 0.7
-    default_confidence: 0.85
-    risk_level_thresholds:
-      critical: 0.75
-      high: 0.5
-      medium: 0.25
-
-# Model monitoring thresholds
-model_monitoring:
-  performance_thresholds:
-    trend_improving: 0.01
-    trend_degrading: -0.01
-  prediction_monitoring:
-    anomaly_threshold_std: 2.0
-
-# Feature toggles
-llm:
-  enabled: false  # Requires OpenAI API key
-rag:
-  enabled: false  # Requires ChromaDB
-monitoring:
-  enabled: true
-compliance:
-  enabled: true
-```
-
-### Configuration Benefits
-
-- **No Hardcoded Values**: All business logic parameters are configurable
-- **Environment-Specific**: Easy to create dev/staging/prod configurations
-- **A/B Testing**: Test different thresholds without code changes
-- **Audit Trail**: Configuration changes are version-controlled
-- **Easy Tuning**: Adjust system behavior without deployment
-
-### Loading Configuration
-
-```python
-from utils.helpers import load_config
-
-# Load configuration
-config = load_config()
-
-# Initialize components with config
-from src.services.business_metrics import BusinessMetricsCalculator
-from src.services.merchant_services import MerchantRiskIntelligenceService
-
-calc = BusinessMetricsCalculator(config=config)
-service = MerchantRiskIntelligenceService(config=config)
-```
-
-See `config/config.yaml` for full configuration options and `VERIFICATION_CHECKLIST.md` for configuration documentation.
-
-## Self-Service Analytics
-
-### Business Dashboard
-
-Interactive Streamlit dashboard for exploring transaction data:
-```bash
-streamlit run dashboards/business_dashboard.py
-```
-
-Features:
-- System overview with key metrics
-- Fraud detection performance analysis
-- Merchant analytics and risk profiling
-- Data export for BI tools (Power BI, Looker)
-- Automated report generation
-
-### BI Export Service
-
-Export pre-aggregated views optimized for BI tools:
-```python
-from src.services.bi_export import BIExportService
-
-export_service = BIExportService()
-exports = export_service.export_all_views(df, formats=['parquet', 'csv'])
-```
-
-Available exports:
-- Transaction data (fact table)
-- Merchant metrics (dimension table)
-- Volume trends (time-series)
-- Detection performance metrics
-
-### Automated Reporting
-
-Generate scheduled business reports:
-```bash
-python scripts/generate_report.py --type daily --data data/transactions.csv
-```
-
-Report types:
-- Daily: Key metrics, fraud cases, top merchants, peak hours
-- Weekly: Aggregated metrics, daily trends, transaction analysis
-- Monthly: Comprehensive analysis, weekly trends, merchant insights
-
-## Data Modeling with dbt
-
-Version-controlled data models for reliable analytics:
-```bash
-cd dbt
-dbt run  # Transform data
-dbt test  # Validate data quality
-```
-
-Models:
-- `stg_transactions` - Staging (Silver layer)
-- `int_transaction_features` - Intermediate features
-- `fct_transactions` - Fact table (Gold layer)
-- `dim_merchants` - Merchant dimension
-
-See `dbt/README.md` for setup and usage details.
-
-## Databricks Integration
-
-PySpark SQL notebooks for large-scale data processing:
-
-- `01_data_ingestion.py` - Data ingestion and Bronze layer
-- `02_feature_engineering.py` - Feature engineering and Silver layer
-- `03_model_training.py` - Model training and Gold layer
-
-See `databricks/README.md` for Databricks workspace setup.
+---
 
 ## Testing
 
 ```bash
-# Run all tests
 pytest tests/
-
-# Test configuration integration
 pytest tests/test_config_integration.py -v
-
-# Test specific module
-pytest tests/test_llm_service.py
-
-# Test with coverage
 pytest --cov=src tests/
 ```
 
-## Security and Compliance
+---
 
-- GDPR Compliant - PII masking and data protection
-- EU AI Act Ready - Full explainability framework
-- Audit Trails - Complete decision logging
-- Privacy-Preserving - Differential privacy support
-- AML Compliant - Regulatory reporting automation
+## Security & Compliance
 
-## Deployment
+- **GDPR-oriented** — PII masking, data protection  
+- **Explainability** — SHAP, audit trails (EU AI Act–friendly)  
+- **AML** — Rule-based scenarios, configurable thresholds, reporting hooks  
 
-### Azure Deployment
-
-The system can be deployed to Azure using:
-
-1. Minimal deployment script:
-```bash
-./deploy_minimal.sh
-```
-
-2. Terraform infrastructure:
-```bash
-cd terraform
-./setup.sh
-./bin/terraform init
-./bin/terraform apply
-```
-
-3. Kubernetes manifests:
-```bash
-kubectl apply -f k8s/
-```
-
-See `terraform/README.md` for detailed deployment instructions.
-
-## Documentation
-
-- Configuration: `config/config.yaml`
-- Configuration Guide: `VERIFICATION_CHECKLIST.md`
-- API Reference: `src/api/main.py`
-- Data Analyst Role: `docs/DATA_ANALYST_ROLE.md`
-- Product Collaboration: `docs/PRODUCT_COLLABORATION.md`
-- Self-Service Guide: `docs/SELF_SERVICE_GUIDE.md`
-- Query Examples: `docs/QUERY_EXAMPLES.md`
-- Dashboard Guide: `docs/DASHBOARD_GUIDE.md`
-- Feature Store Guide: `docs/FEATURE_STORE_GUIDE.md`
-- dbt Documentation: `dbt/README.md`
-
-## Project Statistics
-
-- Python modules: 23 in src/
-- Total Python files: 43
-- SQL models: 4 (dbt)
-- Lines of code: 7,800+
-- Databricks notebooks: 3
-- Test files: 7
-- Documentation files: 8
-- Configuration parameters: 60+
+---
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License.
 
-## Author
+---
 
-Saidul Islam
+## Author & Contact
 
-- GitHub: [@saidulIslam1602](https://github.com/saidulIslam1602)
-- LinkedIn: [Md Saidul Islam](https://www.linkedin.com/in/mdsaidulislam1602/)
+**KuchikiRenji**
 
-## Acknowledgments
+- **GitHub:** [KuchikiRenji](https://github.com/KuchikiRenji)  
+- **Email:** KuchikiRenji@outlook.com  
+- **Discord:** `kuchiki_renji`  
 
-Built for enterprise payment processing platforms and designed to demonstrate data analyst capabilities including SQL, Python, Databricks, dbt, and self-service analytics tools.
+---
 
-Last Updated: December 2025
-Version: 2.1.0
-Status: Production-Ready
+*Transaction Anomaly Detection — fraud detection, AML, and anomaly detection with machine learning and deep learning. Production-ready, configurable, and explainable.*
+
+**Last updated:** February 2025 · **Version:** 2.1.0 · **Status:** Production-ready
